@@ -8,6 +8,11 @@
             TestConsoleMonFunctions();
             TestSkillFunctions();
             TestFactoryFunctions();
+            TestConstructors();
+            TestCopySkill();
+            TestCopyConsoleMon();
+            FightArena();
+           // Console.ReadLine();
         }
         static void TestConsoleMonFunctions()
         {
@@ -42,6 +47,97 @@
             Console.WriteLine("TestFactoryFunctions");
             ConsoleMonFactory factory = new ConsoleMonFactory();
             factory.Load("monsterdata.txt");
+            factory.LoadJson("monsterdata.json");
+        }
+        static void TestConstructors()
+        {
+            Console.WriteLine("TestConstructors");
+            ConsoleMon mon = new ConsoleMon(200, 200, "ConsoleColorMon", Element.Earth);
+
+            Console.WriteLine(mon.energy == 200);
+            Console.WriteLine(mon.name == "ConsoleColorMon");
+            Console.WriteLine(mon.health == 200);
+            Console.WriteLine(mon.weakness == Element.Earth);
+
+
+            Skill skill = new Skill(90, 80, "FireBlade", Element.Fire);
+            Console.WriteLine(skill.energyCost == 80);
+            Console.WriteLine(skill.name == "FireBlade");
+            Console.WriteLine(skill.damage == 90);
+            Console.WriteLine(skill.element == Element.Fire);
+
+        }
+        static void TestCopySkill()
+        {
+            Console.WriteLine("TestCopySkill");
+            ConsoleMonFactory factory = new ConsoleMonFactory();
+            List<ConsoleMon> templates = factory.LoadJson("monsterdata.json");
+            Skill copyFrom = templates[0].skills[0];
+
+            Skill copy = factory.CopySkill(copyFrom);
+            Console.WriteLine(copy.name == copyFrom.name);
+            Console.WriteLine(copy.damage == copyFrom.damage);
+            Console.WriteLine(copy.element == copyFrom.element);
+            copy.name = "anders";
+            Console.WriteLine(copy.name != copyFrom.name);
+        }
+        static void TestCopyConsoleMon()
+        {
+            Console.WriteLine("TestCopyConsoleMon");
+            ConsoleMonFactory factory = new ConsoleMonFactory();
+            List<ConsoleMon> templates = factory.LoadJson("monsterdata.json");
+            ConsoleMon copyFrom = templates[0];
+
+            ConsoleMon copy = factory.CopyConsoleMon(copyFrom);
+            Console.WriteLine(copy.name == copyFrom.name);
+            Console.WriteLine(copy.health == copyFrom.health);
+            Console.WriteLine(copy.skills == copyFrom.skills);
+            Console.WriteLine(copy.skills[0] == copyFrom.skills[0]);
+            copy.name = "anders";
+            copy.skills[0].name = "newskill";
+            Console.WriteLine(copy.name != copyFrom.name);
+            Console.WriteLine(copy.skills[0].name != copyFrom.skills[0].name);
+        }
+
+        static void FightArena()
+        {
+            Console.WriteLine("            |Battle|             ");
+            Console.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+
+
+            //make the fighters
+            ConsoleMon fighterA = new ConsoleMon();
+            ConsoleMon fighterB = new ConsoleMon();
+            fighterA.skills = new List<Skill>();
+            fighterB.skills = new List<Skill>();
+
+            //names
+            fighterA.name = "Potato";
+            fighterB.name = "Tomato";
+
+            //health
+            fighterA.health = 100;
+            fighterB.health = 100;
+
+            //energy
+            fighterA.energy = 50;
+            fighterB.energy = 50;
+
+            //weakness
+            fighterA.weakness = Element.Plant;
+            fighterB.weakness = Element.Dirt;
+
+            //skills
+            Skill skillA = new Skill(35, 10, "Potato", Element.Dirt);
+            fighterA.skills.Add(skillA);
+            Skill skillB = new Skill(55, 25, "Tomato", Element.Plant);
+            fighterB.skills.Add(skillB);
+
+            //make arena and battle fighters
+            Arena arena = new Arena();
+            arena.Fight(fighterA, fighterB);
+
+
         }
     }
 }

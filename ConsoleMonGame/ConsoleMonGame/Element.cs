@@ -12,6 +12,8 @@ namespace ConsoleMonGame
         Earth,
         Water,
         Wind,
-        Physical
+        Physical,
+        Dirt,
+        Plant
     }
 }
